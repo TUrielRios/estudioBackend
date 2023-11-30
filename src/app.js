@@ -17,7 +17,7 @@ server.use(cookieParser());
 server.use(morgan('dev'));
 
 // Utilizar solo cors sin configuración manual adicional
-server.use(cors({ origin: 'http://localhost:3000', credentials: true }));
+server.use(cors({ origin: '*', credentials: true }));
 
 server.use('/', routes);
 
