@@ -46,7 +46,7 @@ obrasRoutes.get('/:id', async (req, res) => {
 });
 
 // Ruta para crear una nueva obra
-obrasRoutes.post('/',upload.array('imagenes', 5), async (req, res) => {
+obrasRoutes.post('/',upload.array('imagenes', 10), async (req, res) => {
     const { nombre, año, finalidades, superficie, lugar, estado, json_data } = req.body;
     const imagenes = req.files.map((file) => file.path);
 
