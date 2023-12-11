@@ -4,6 +4,13 @@ const empleadosRoutes = express.Router();
 const { Empleado } = require('../db');
 const multer = require('multer');
 const fs = require('fs').promises;
+const cloudinary = require('cloudinary').v2;
+          
+cloudinary.config({ 
+  cloud_name: 'dhiss395i', 
+  api_key: '765213187315739', 
+  api_secret: 'zG-oa_bay4_vqEOhiT7UcIdj89s' 
+});
 
 // Configuración de multer
 const storage = multer.diskStorage({
@@ -44,12 +51,15 @@ empleadosRoutes.post('/', upload.single('foto'), async (req, res) => {
   
       // Obtiene el contenido del archivo JSON si se proporcionó
       const jsonData = json_data ? JSON.parse(json_data) : null;
+      
+      //subir a cloudinary
+      const cloudinaryUploadResult = await cloudinary.uploader.upload(req.file.path);
   
       // Resto de la lógica para crear el empleado utilizando jsonData y req.file
       const nuevoEmpleado = await Empleado.create({
         nombre_completo: jsonData.nombre_completo,
         cargo: jsonData.cargo,
-        foto: req.file.path,
+        foto: cloudinaryUploadResult.secure_url, // Utiliza la URL segura proporcionada por Cloudinary,
         cedula_a: jsonData.cedula_a,
         cedula_b: jsonData.cedula_b,
         // También puedes incluir campos adicionales según sea necesario
@@ -87,9 +97,9 @@ empleadosRoutes.get('/:id', async (req, res) => {
   });
   
   // Actualizar un empleado por ID
-  empleadosRoutes.put('/:id', async (req, res) => {
+  empleadosRoutes.put('/:id', upload.single('foto'), async (req, res) => {
     const empleadoId = req.params.id;
-    const { nombre_completo, cargo, foto, cedula_a, cedula_b } = req.body;
+    const { nombre_completo, cargo, cedula_a, cedula_b } = req.body;
   
     try {
       const empleado = await Empleado.findByPk(empleadoId);
@@ -101,9 +111,19 @@ empleadosRoutes.get('/:id', async (req, res) => {
       // Actualizar los datos del empleado
       empleado.nombre_completo = nombre_completo;
       empleado.cargo = cargo;
-      empleado.foto = foto;
       empleado.cedula_a = cedula_a;
       empleado.cedula_b = cedula_b;
+
+  
+      // Verificar si se proporcionó una nueva imagen
+      if (req.file) {
+        // Subir la nueva imagen a Cloudinary
+        const cloudinaryUploadResult = await cloudinary.uploader.upload(req.file.path);
+        empleado.foto = cloudinaryUploadResult.secure_url;
+  
+        // Eliminar el archivo local después de subirlo a Cloudinary
+        await fs.unlink(req.file.path);
+      }
   
       await empleado.save();
   
@@ -113,7 +133,6 @@ empleadosRoutes.get('/:id', async (req, res) => {
       res.status(500).json({ error: 'Error al actualizar el empleado' });
     }
   });
-  
   // Eliminar un empleado por ID
   empleadosRoutes.delete('/:id', async (req, res) => {
     const empleadoId = req.params.id;

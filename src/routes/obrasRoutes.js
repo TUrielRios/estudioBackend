@@ -3,6 +3,13 @@ const { Obra } = require('../db');
 const obrasRoutes = express.Router();
 const multer = require('multer');
 const fs = require('fs').promises;
+const cloudinary = require('cloudinary').v2;
+          
+cloudinary.config({ 
+  cloud_name: 'dhiss395i', 
+  api_key: '765213187315739', 
+  api_secret: 'zG-oa_bay4_vqEOhiT7UcIdj89s' 
+});
 
 // Configuración de Multer para manejar múltiples archivos
 // Configuración de multer
@@ -46,34 +53,49 @@ obrasRoutes.get('/:id', async (req, res) => {
 });
 
 // Ruta para crear una nueva obra
-obrasRoutes.post('/',upload.array('imagenes', 10), async (req, res) => {
+obrasRoutes.post('/', upload.array('imagenes', 10), async (req, res) => {
     const { nombre, año, finalidades, superficie, lugar, estado, json_data } = req.body;
-    const imagenes = req.files.map((file) => file.path);
-
+  
     // Verifica si se proporcionó algún archivo
     if (!req.files || req.files.length === 0) {
-        throw new Error('No se ha proporcionado ningún archivo.');
+      throw new Error('No se ha proporcionado ningún archivo.');
     }
-
-        // Obtiene el contenido del archivo JSON si se proporcionó
-        const jsonData = json_data ? JSON.parse(json_data) : null;
+  
+    // Obtiene el contenido del archivo JSON si se proporcionó
+    const jsonData = json_data ? JSON.parse(json_data) : null;
+  
     try {
-        const nuevaObra = await Obra.create({
+      // Sube las imágenes a Cloudinary
+      const cloudinaryUploadResults = await Promise.all(
+        req.files.map(async (file) => {
+          const result = await cloudinary.uploader.upload(file.path);
+          return result.secure_url;
+        })
+      );
+  
+      const nuevaObra = await Obra.create({
         nombre: jsonData.nombre,
         año: jsonData.año,
         finalidades: jsonData.finalidades,
         superficie: jsonData.superficie,
         lugar: jsonData.lugar,
         estado: jsonData.estado,
-        imagenes: imagenes
-        });
-
-        res.status(201).json(nuevaObra);
+        imagenes: cloudinaryUploadResults,
+      });
+  
+      // Elimina los archivos locales después de subirlos a Cloudinary
+      await Promise.all(req.files.map((file) => fs.unlink(file.path)));
+  
+      res.status(201).json(nuevaObra);
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Error al crear una nueva obra' });
+      console.error(error);
+  
+      // Elimina los archivos locales si ha ocurrido un error durante la creación de la obra
+      await Promise.all(req.files.map((file) => fs.unlink(file.path)));
+  
+      res.status(500).json({ error: 'Error al crear una nueva obra' });
     }
-});
+  });
 
 // Ruta para actualizar una obra por su ID
 obrasRoutes.put('/:id', async (req, res) => {
@@ -93,6 +115,21 @@ obrasRoutes.put('/:id', async (req, res) => {
             estado,
             imagenes,
         });
+              // Verificar si se proporcionó una nueva imagen
+      if  (!req.files || req.files.length === 0) {
+        // Subir la nueva imagen a Cloudinary
+      // Sube las imágenes a Cloudinary
+      const cloudinaryUploadResults = await Promise.all(
+        req.files.map(async (file) => {
+          const result = await cloudinary.uploader.upload(file.path);
+          return result.secure_url;
+        })
+      );
+        obra.imagenes = cloudinaryUploadResults.secure_url;
+  
+      // Elimina los archivos locales después de subirlos a Cloudinary
+      await Promise.all(req.files.map((file) => fs.unlink(file.path)));
+      }
 
         res.status(200).json(obra);
         } else {
