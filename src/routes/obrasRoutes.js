@@ -12,15 +12,18 @@ cloudinary.config({
 });
 
 // Configuración de Multer para manejar múltiples archivos
-// Configuración de multer
+// Determinar la carpeta de destino dinámicamente
+const uploadDestination = process.env.UPLOADS_PATH || 'uploads/';
+// Configuración de Multer para manejar múltiples archivos
 const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-      cb(null, 'uploads/'); // Carpeta donde se almacenarán los archivos subidos
-    },
-    filename: function (req, file, cb) {
-      cb(null, Date.now() + '-' + file.originalname); // Nombre del archivo almacenado
-    },
+  destination: function (req, file, cb) {
+    cb(null, uploadDestination);
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + '-' + file.originalname);
+  },
 });
+
 const upload = multer({ storage: storage });
 
 // Ruta para obtener todas las obras
@@ -58,7 +61,8 @@ obrasRoutes.post('/', upload.array('imagenes', 10), async (req, res) => {
   
     // Verifica si se proporcionó algún archivo
     if (!req.files || req.files.length === 0) {
-      throw new Error('No se ha proporcionado ningún archivo.');
+      res.status(400).json({ error: 'No se ha proporcionado ningún archivo.' });
+      return;
     }
   
     // Obtiene el contenido del archivo JSON si se proporcionó
@@ -88,7 +92,7 @@ obrasRoutes.post('/', upload.array('imagenes', 10), async (req, res) => {
   
       res.status(201).json(nuevaObra);
     } catch (error) {
-      console.error(error);
+      console.error({error: error.message});
   
       // Elimina los archivos locales si ha ocurrido un error durante la creación de la obra
       await Promise.all(req.files.map((file) => fs.unlink(file.path)));
