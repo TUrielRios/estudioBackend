@@ -18,8 +18,10 @@ cloudinary.config({
 // Configuración de multer
 const storage = multer.diskStorage({
   destination: async (req, file, callback) => {
-    const destinationPath = path.join(__dirname, '/Images');
+    const destinationPath = path.resolve('Images');
     try {
+      const rootPath = path.resolve('/var/task/src/routes');
+ 
       await fsPromises.mkdir(destinationPath, { recursive: true });
       callback(null, destinationPath);
     } catch (error) {
@@ -81,11 +83,11 @@ obrasRoutes.post('/', upload.array('imagenes', 10), async (req, res) => {
       // Sube las imágenes a Cloudinary
       const cloudinaryUploadResults = await Promise.all(
         req.files.map(async (file) => {
-          const result = await cloudinary.uploader.upload(path.join(__dirname, '/Images', file.filename));
+          const result = await cloudinary.uploader.upload(file.path);
           return result.secure_url;
         })
       );
-  
+      
       const nuevaObra = await Obra.create({
         nombre: jsonData.nombre,
         año: jsonData.año,
