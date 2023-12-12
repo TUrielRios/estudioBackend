@@ -4,6 +4,9 @@ const obrasRoutes = express.Router();
 const multer = require('multer');
 const fs = require('fs').promises;
 const cloudinary = require('cloudinary').v2;
+const hash = require('random-hash'); // you have to install this package:
+const path = require('path');
+const fsPromises = require('fs').promises;
           
 cloudinary.config({ 
   cloud_name: 'dhiss395i', 
@@ -12,18 +15,25 @@ cloudinary.config({
 });
 
 // Configuración de Multer para manejar múltiples archivos
-// Determinar la carpeta de destino dinámicamente
-const uploadDestination = process.env.UPLOADS_PATH || 'uploads/';
-// Configuración de Multer para manejar múltiples archivos
+// Configuración de multer
 const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, uploadDestination);
+  destination: async (req, file, callback) => {
+    const destinationPath = path.join(__dirname, '/Images');
+    try {
+      await fsPromises.mkdir(destinationPath, { recursive: true });
+      callback(null, destinationPath);
+    } catch (error) {
+      console.error('Error al crear el directorio:', error);
+      callback(error);
+    }
   },
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + '-' + file.originalname);
-  },
-});
 
+  filename: (req, file, callback) => { //this is just setting a unique filename
+      let temp = file.originalname.split('.');
+      const filename = temp[0] + '-' + hash.generateHash({length: 5}) + '.' + temp[1]
+      callback(null, filename);
+  }
+});
 const upload = multer({ storage: storage });
 
 // Ruta para obtener todas las obras
@@ -61,8 +71,7 @@ obrasRoutes.post('/', upload.array('imagenes', 10), async (req, res) => {
   
     // Verifica si se proporcionó algún archivo
     if (!req.files || req.files.length === 0) {
-      res.status(400).json({ error: 'No se ha proporcionado ningún archivo.' });
-      return;
+      throw new Error('No se ha proporcionado ningún archivo.');
     }
   
     // Obtiene el contenido del archivo JSON si se proporcionó
@@ -72,7 +81,7 @@ obrasRoutes.post('/', upload.array('imagenes', 10), async (req, res) => {
       // Sube las imágenes a Cloudinary
       const cloudinaryUploadResults = await Promise.all(
         req.files.map(async (file) => {
-          const result = await cloudinary.uploader.upload(file.path);
+          const result = await cloudinary.uploader.upload(path.join(__dirname, '/Images', file.filename));
           return result.secure_url;
         })
       );
@@ -92,7 +101,7 @@ obrasRoutes.post('/', upload.array('imagenes', 10), async (req, res) => {
   
       res.status(201).json(nuevaObra);
     } catch (error) {
-      console.error({error: error.message});
+      console.error(error);
   
       // Elimina los archivos locales si ha ocurrido un error durante la creación de la obra
       await Promise.all(req.files.map((file) => fs.unlink(file.path)));

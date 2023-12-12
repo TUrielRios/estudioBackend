@@ -20,9 +20,12 @@
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.18.2",
+    "hash": "^0.2.1",
     "morgan": "^1.10.0",
     "multer": "^1.4.5-lts.1",
+    "path": "^0.12.7",
     "pg": "^8.11.3",
+    "random-hash": "^4.0.1",
     "sequelize": "^6.35.1"
   },
   "devDependencies": {
