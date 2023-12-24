@@ -13,7 +13,7 @@ module.exports = (sequelize) => {
       allowNull: true,
     },
     imagenes: {
-      type: DataTypes.TEXT, // Puedes cambiar el tipo de datos según tus necesidades
+      type: DataTypes.ARRAY(DataTypes.TEXT), // Puedes cambiar el tipo de datos según tus necesidades
       allowNull: true,
     },
     finalidades: {
