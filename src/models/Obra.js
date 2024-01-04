@@ -24,6 +24,10 @@ module.exports = (sequelize) => {
       type: DataTypes.STRING,
       allowNull: true,
     },
+    metrosSemicubiertos: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
     lugar: {
       type: DataTypes.STRING,
       allowNull: true,
