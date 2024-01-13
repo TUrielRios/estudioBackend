@@ -31,12 +31,7 @@ module.exports = (sequelize) => {
             allowNull: true,
         },
     // Otros campos según tus necesidades
-    },{
-        // Opciones adicionales del modelo
-        defaultScope: {
-          // Excluir el campo password por defecto
-            attributes: { exclude: ['password','username','mail'] },
-        },
     }
+
     )
 }
