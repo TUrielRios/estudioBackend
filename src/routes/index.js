@@ -4,6 +4,7 @@ const dataRoutes = require('./dataRoutes');
 const obrasRoutes = require('./obrasRoutes')
 const muralismosRoutes = require('./muralismosRoutes')
 const emailRoutes = require('./emailRoutes')
+const recoverpassRoutes = require('./recoverpassRoutes')
 // Importar todos los routers;
 // Ejemplo: const authRouter = require('./auth.js');
 
@@ -17,6 +18,7 @@ app.use('/data', dataRoutes);
 app.use('/obras', obrasRoutes);
 app.use('/muralismos', muralismosRoutes);
 app.use('/send-email', emailRoutes)
+app.use('/recover-pass', recoverpassRoutes)
 
 
 module.exports = app;
