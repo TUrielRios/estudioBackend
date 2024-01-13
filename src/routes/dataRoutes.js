@@ -1,20 +1,7 @@
 const express = require('express');
 const dataRoutes = express.Router();
 const { Data } = require('../db');
-const multer = require('multer');
-const fs = require('fs').promises;
 
-// Configuración de multer
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-      cb(null, 'uploads/'); // Carpeta donde se almacenarán los archivos subidos
-    },
-    filename: function (req, file, cb) {
-      cb(null, Date.now() + '-' + file.originalname); // Nombre del archivo almacenado
-    },
-});
-
-const upload = multer({ storage: storage });
 
 // Ruta para obtener todas las instancias de Data
 dataRoutes.get('/', async (req, res) => {
@@ -46,26 +33,15 @@ dataRoutes.get('/:id', async (req, res) => {
 });
 
 // Ruta para crear una nueva instancia de Data
-dataRoutes.post('/',upload.single('foto'), async (req, res) => {
-    const { telefono, mail, username, password, ubicacion, curiosidad, json_data } = req.body;
-
-    // Verifica si se proporcionó el archivo
-    if (!req.file) {
-        throw new Error('No se ha proporcionado ningún archivo.');
-        }
-
-        // Obtiene el contenido del archivo JSON si se proporcionó
-        const jsonData = json_data ? JSON.parse(json_data) : null;
+dataRoutes.post('/', async (req, res) => {
+    const { telefono, mail, password, ubicacion } = req.body;
 
   try {
     const newDataInstance = await Data.create({
-      telefono: jsonData.telefono,
-      mail: jsonData.mail,
-      username: jsonData.username,
-      password: jsonData.password,
-      ubicacion: jsonData.ubicacion,
-      logo: req.file.path,
-      curiosidad: jsonData.curiosidad,
+      telefono: telefono,
+      mail: mail,
+      password: password,
+      ubicacion: ubicacion,
     });
 
     res.status(201).json(newDataInstance);
@@ -78,7 +54,7 @@ dataRoutes.post('/',upload.single('foto'), async (req, res) => {
 // Ruta para actualizar una instancia de Data por su ID
 dataRoutes.put('/:id', async (req, res) => {
   const dataId = req.params.id;
-  const { telefono, mail, username, password, ubicacion, logo, curiosidad } = req.body;
+  const { telefono, mail, password, ubicacion, logo, curiosidad } = req.body;
 
   try {
     const dataInstance = await Data.findByPk(dataId);
@@ -87,7 +63,6 @@ dataRoutes.put('/:id', async (req, res) => {
       await dataInstance.update({
         telefono,
         mail,
-        username,
         password,
         ubicacion,
         logo,
