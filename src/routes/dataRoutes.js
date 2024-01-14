@@ -52,7 +52,7 @@ dataRoutes.post('/', async (req, res) => {
 });
 
 // Ruta para actualizar una instancia de Data por su ID
-dataRoutes.put('/:id', async (req, res) => {
+dataRoutes.put('/', async (req, res) => {
   const dataId = req.params.id;
   const { telefono, mail, password, ubicacion, logo, curiosidad } = req.body;
 
