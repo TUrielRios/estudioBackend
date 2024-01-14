@@ -51,12 +51,22 @@ dataRoutes.post('/', async (req, res) => {
   }
 });
 
-// Ruta para actualizar una instancia de Data por su ID
-dataRoutes.put('/', async (req, res) => {
-  const dataId = req.params.id;
+// Ruta para actualizar una instancia de Data por su ID o sin ID
+dataRoutes.put('/:id?', async (req, res) => {
+  let dataId = req.params.id;
   const { telefono, mail, password, ubicacion, logo, curiosidad } = req.body;
 
   try {
+    // Si no se proporciona un ID en la URL, busca el primer registro
+    if (!dataId) {
+      const firstDataInstance = await Data.findOne();
+      if (firstDataInstance) {
+        dataId = firstDataInstance.id;
+      } else {
+        return res.status(404).json({ error: 'No hay datos disponibles para actualizar' });
+      }
+    }
+
     const dataInstance = await Data.findByPk(dataId);
 
     if (dataInstance) {
