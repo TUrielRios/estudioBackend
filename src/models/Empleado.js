@@ -7,6 +7,10 @@ module.exports = (sequelize) => {
         type: DataTypes.STRING,
         allowNull: true,
     },
+    posicion: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+      },
     cargo: {
         type: DataTypes.STRING,
         allowNull: true,
