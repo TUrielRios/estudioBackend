@@ -39,13 +39,15 @@ emailRoutes.post('/', (req, res) => {
         to: email,
         subject: 'Gracias por tu mensaje, ' + nombre,
         html: `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #333; padding: 20px; color: #fff;">
-            <p style="font-size: 18px;">Hemos recibido tu mensaje. Nos pondremos en contacto contigo pronto.</p>
-            <br/> <p style="font-size: 16px;">Atentamente, equipo de Francisco.</p>
-            <div style="text-align: center;">
-                <img src="https://defranciscoestudio.vercel.app/static/media/fondoOriginal.e16fa2e242134966a5a4.png" alt="Logo de la empresa" style="max-width: 100%; height: auto; margin: 20px 0;">
-            </div>
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #fff; padding: 20px; color: #000; border-radius: 10px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);">
+        <p style="font-size: 18px;">Hemos recibido tu mensaje. Nos pondremos en contacto contigo pronto.</p>
+        <br/>
+        <p style="font-size: 16px;">Atentamente, equipo de Francisco.</p>
+        <div style="text-align: center;">
+            <img src="api\src\assets\mailfooter.jpeg" alt="Logo de la empresa" style="max-width: 100%; height: auto; margin: 20px 0; border-radius: 5px;">
         </div>
+    </div>
+    
     `,
 
     };
