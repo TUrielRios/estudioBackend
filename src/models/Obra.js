@@ -8,6 +8,10 @@ module.exports = (sequelize) => {
       type: DataTypes.STRING,
       allowNull: true,
     },
+    posicion: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+    },
     año: {
       type: DataTypes.STRING,
       allowNull: true,

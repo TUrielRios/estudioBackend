@@ -8,7 +8,7 @@ const transporter = nodemailer.createTransport({
     service: 'Gmail', // Puedes usar otros servicios o configurar SMTP según tus necesidades
     auth: {
         user: 'equipodemail12@gmail.com',
-        pass: 'dpsf wdxx koai cgfv',
+        pass: 'pmod kgvm ujif sndr',
     },
 });
 
@@ -18,8 +18,8 @@ emailRoutes.post('/', (req, res) => {
 
     // Configuración del correo electrónico de notificación al equipo
     const mailOptionsEquipo = {
-        from: 'equipodemail12@gmail.com',
-        to: 'equipodemail12@gmail.com',
+        from: 'defranciscoestudio@gmail.com',
+        to: 'defranciscoestudio@gmail.com',
         subject: `Nuevo mensaje de ${nombre}`,
         html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #f9f9f9; padding: 20px; border-radius: 10px;">
@@ -36,7 +36,7 @@ emailRoutes.post('/', (req, res) => {
 
     // Configuración del correo electrónico de respuesta automática al remitente
     const mailOptionsRespuesta = {
-        from: 'equipodemail12@gmail.com',
+        from: 'defranciscoestudio@gmail.com',
         to: email,
         subject: 'Gracias por tu mensaje, ' + nombre,
         html: `

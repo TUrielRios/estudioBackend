@@ -33,13 +33,14 @@ obrasRoutes.get('/:id', async (req, res) => {
 
 // Ruta para crear una nueva obra
 obrasRoutes.post('/', async (req, res) => {
-    const { nombre, año, finalidades, superficie, lugar, estado,imagenes, metrosSemicubiertos} = req.body;
+    const { nombre, año, finalidades, superficie, lugar, estado,imagenes, metrosSemicubiertos, posicion} = req.body;
   
   
     try {
 
       const nuevaObra = await Obra.create({
         nombre: nombre,
+        posicion: posicion,
         año: año,
         finalidades: finalidades,
         superficie: superficie,
@@ -60,7 +61,7 @@ obrasRoutes.post('/', async (req, res) => {
 // Ruta para actualizar una obra por su ID
 obrasRoutes.put('/:id', async (req, res) => {
     const obraId = req.params.id;
-    const { nombre, año, finalidades, superficie, lugar, estado, imagenes, metrosSemicubiertos } = req.body;
+    const { nombre, año, finalidades, superficie, lugar, estado, imagenes, metrosSemicubiertos, posicion } = req.body;
 
     try {
         const obra = await Obra.findByPk(obraId);
@@ -68,6 +69,7 @@ obrasRoutes.put('/:id', async (req, res) => {
         if (obra) {
         await obra.update({
             nombre,
+            posicion,
             año,
             finalidades,
             superficie,
