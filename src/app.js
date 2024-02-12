@@ -12,6 +12,24 @@ const server = express();
 server.name = 'API';
 
 server.use(bodyParser.urlencoded({ extended: true }));
+// Middleware para agregar encabezados de seguridad a todas las respuestas
+server.use((req, res, next) => {
+  // X-Frame-Options
+  res.setHeader('X-Frame-Options', 'DENY'); // o 'SAMEORIGIN' según tu preferencia
+  
+  // X-Content-Type-Options
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  
+  // Content-Security-Policy
+  res.setHeader('Content-Security-Policy', "default-src 'self'; script-src 'self'");
+
+
+  // Referrer-Policy
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+  
+  next();
+});
+
 server.use(bodyParser.json());
 server.use(cookieParser());
 server.use(morgan('dev'));
