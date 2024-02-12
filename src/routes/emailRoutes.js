@@ -2,6 +2,7 @@ const express = require('express');
 const nodemailer = require('nodemailer');
 const emailRoutes = express.Router();
 
+
 // Configuración del transporte Nodemailer
 const transporter = nodemailer.createTransport({
     service: 'Gmail', // Puedes usar otros servicios o configurar SMTP según tus necesidades
@@ -44,7 +45,7 @@ emailRoutes.post('/', (req, res) => {
         <br/>
         <p style="font-size: 16px;">Atentamente, equipo de Francisco.</p>
         <div style="text-align: center;">
-            <img src="api\src\assets\mailfooter.jpeg" alt="Logo de la empresa" style="max-width: 100%; height: auto; margin: 20px 0; border-radius: 5px;">
+            <img src="assets/mailfooter.jpeg" alt="Logo de la empresa" style="max-width: 100%; height: auto; margin: 20px 0; border-radius: 5px;">
         </div>
     </div>
     
