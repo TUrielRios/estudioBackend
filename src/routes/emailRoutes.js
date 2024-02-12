@@ -45,7 +45,7 @@ emailRoutes.post('/', (req, res) => {
         <br/>
         <p style="font-size: 16px;">Atentamente, equipo de Francisco.</p>
         <div style="text-align: center;">
-            <img src="assets/mailfooter.jpeg" alt="Logo de la empresa" style="max-width: 100%; height: auto; margin: 20px 0; border-radius: 5px;">
+            <img src="C:\Users\PC\Desktop\Tiziano\Proyectos-vscode\deFrancisco\api\src\assets\mailfooter.jpeg" alt="Logo de la empresa" style="max-width: 100%; height: auto; margin: 20px 0; border-radius: 5px;">
         </div>
     </div>
     
