@@ -7,7 +7,7 @@ const emailRoutes = express.Router();
 const transporter = nodemailer.createTransport({
     service: 'Gmail', // Puedes usar otros servicios o configurar SMTP según tus necesidades
     auth: {
-        user: 'equipodemail12@gmail.com',
+        user: 'defranciscoestudio@gmail.com',
         pass: 'pmod kgvm ujif sndr',
     },
 });
@@ -41,11 +41,11 @@ emailRoutes.post('/', (req, res) => {
         subject: 'Gracias por tu mensaje, ' + nombre,
         html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #fff; padding: 20px; color: #000; border-radius: 10px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);">
-        <p style="font-size: 18px;">Hemos recibido tu mensaje. Nos pondremos en contacto contigo pronto.</p>
+        <p style="font-size: 16px;">Hemos recibido tu mensaje. Nos pondremos en contacto contigo pronto.</p>
         <br/>
-        <p style="font-size: 16px;">Atentamente, equipo de Francisco.</p>
-        <div style="text-align: center;">
-            <img src="https://res.cloudinary.com/dhiss395i/image/upload/v1707703217/hkku2bbrl4t5jskxankl.jpg" alt="Logo de la empresa" style="max-width: 100%; height: auto; margin: 20px 0; border-radius: 5px;">
+        <p style="font-size: 14px;">Atentamente, equipo de Francisco.</p>
+        <div style="text-align: left;">
+            <img src="https://res.cloudinary.com/dhiss395i/image/upload/v1707703217/hkku2bbrl4t5jskxankl.jpg" alt="Estudio De francisco" style="max-width: 60%; height: auto; margin: 20px 0; border-radius: 5px;">
         </div>
     </div>
     
