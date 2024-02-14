@@ -45,7 +45,7 @@ emailRoutes.post('/', (req, res) => {
         <br/>
         <p style="font-size: 14px;">Atentamente, equipo de Francisco.</p>
         <div style="text-align: left;">
-            <img src="https://res.cloudinary.com/dhiss395i/image/upload/v1707703217/hkku2bbrl4t5jskxankl.jpg" alt="Estudio De francisco" style="max-width: 60%; height: auto; margin: 20px 0; border-radius: 5px;">
+            <img src="https://res.cloudinary.com/dhiss395i/image/upload/v1707703217/hkku2bbrl4t5jskxankl.jpg" alt="Estudio De francisco" style="max-width: 30%; height: auto; margin: 20px 0; border-radius: 5px;">
         </div>
     </div>
     
